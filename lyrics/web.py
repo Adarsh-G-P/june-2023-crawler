@@ -15,3 +15,19 @@ def index():
 @app.route("/user/<id>")
 def users(id):
     return f"You asked for user {id}"
+
+@app.route("/artists")
+def list_artist():
+    db = models.init_db(app)
+    print(db)
+    artists = db.session.execute(db.select(models.Artist.name))
+    print(artists)
+    artist_name = [artist.name for artist in artists]
+    print(artist_name)
+    ret = "<h1>Artists</h1>"
+    for idx,name in enumerate(artist_name, start=1):
+        ret += f"{idx}.{name}<br>"
+        # return f"<ul><li>{idx}.{name}</li></ul>"
+
+    return f'{ret}'
+    

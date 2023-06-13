@@ -1,6 +1,6 @@
 import psycopg2
 
-db = psycopg2.connect("dbname=lyrics")
+db = psycopg2.connect("dbname=students")
 
 # DB functions
 def initdb():
