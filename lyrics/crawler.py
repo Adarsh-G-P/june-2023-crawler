@@ -3,18 +3,29 @@ import os
 import psycopg2
 import requests
 from bs4 import BeautifulSoup
-import lyrics as lyricsdb
-import lyrics.utils as utils
 
+import models
+import utils as utils
 
 db = psycopg2.connect("dbname=students")
 
 logger = utils.get_logger()
 
-
 # Crawler functions
 def crawl_artists(data, count=10):
+    """
+    Inputs :
+      1. HTML string which contains a list of artists. 
+      2. Count is the maximum number of artists that will be returned.
+
+    Outputs:
+      1. A list each element of which is of the form
+         ("artist name", link to tracks of artist)
+
+    Description of what this does:
+      Parses the input HTML, find the list of artists. Creates a list as mentioned in outputs and returns the list
     
+    """
     soup = BeautifulSoup(data, features="html.parser") # Create soup
     artists = soup.find_all("td", {"class": "td-last"}) # Search for all artist td nodes
     ret = []
@@ -22,16 +33,25 @@ def crawl_artists(data, count=10):
         a = i.find("a") # Get the anchor inside the td
         ret.append((a.text.strip(), a["href"])) # Extract the name and target from anchor
         if count is not None:
-            if count.isnumeric():
-                count = int(count) - 1
-
-                if count == 0:
-                    break
+            count -= 1
+            if count == 0:
+                break
 
     return ret
 
 def crawl_tracks_of_artist(data, count=5):
-   
+    """
+    Inputs : 
+      HTML string which contains all tracks of a single artist
+
+    Outputs :
+      A list each element of which is of the form
+      ("track name", "lyrics of the song")
+
+    Description : 
+      Parses the input HTML to find all the tracks of the artist. Creates a list like mentioned in the output
+    
+    """
     soup = BeautifulSoup(data, features="html.parser")
     tracks = soup.find("table", {"class" : "tracklist"})
     ret = []
@@ -55,18 +75,15 @@ def extract_lyrics(data):
         lyrics = ""
     return lyrics
 
-
-
 def crawl(start_url, nartists, ntracks):
     data = requests.get(start_url).text
     artists = crawl_artists(data, nartists)
     for artist_name, artist_link in artists:
-        print (f"{artist_name} : ", end="", flush = True)
+        logger.info("Downloading %s", artist_name)
         tracks_page = requests.get(artist_link).text
         tracks = crawl_tracks_of_artist(tracks_page, ntracks)
         for track_name, lyrics in tracks:
-            save_track(artist_name, track_name, lyrics)
-            save_track_to_db(artist_name, track_name, lyrics)
-            print (".", end="", flush=True)
-        print()
+            models.save_track_to_db(artist_name, track_name, lyrics)
+
+            logger.debug(" Downloading song %s", track_name)
 
