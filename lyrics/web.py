@@ -31,3 +31,14 @@ def list_artist():
 
     return f'{ret}'
     
+
+@app.route("/artists/tracks")
+def tracks():
+    db = models.init_db(app)
+    artists = db.session.execute(db.select(models.Artist)).scalars()
+    output = []
+    for artist in artists:
+        artist_tracks = db.session.execute(db.select(models.Tracks).where(models.Tracks.artist_id == artist.id)).scalars()
+        artist_track_names = set([track.name for track in artist_tracks]) 
+        output.append(f"{artist.name}: {', '.join(artist_track_names)}")
+    return "<br><br>".join(output)    
