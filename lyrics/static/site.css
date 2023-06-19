@@ -1,0 +1,32 @@
+body{
+    /* background-image: linear-gradient(rgba(0, 0, 0, 0.527),rgba(0, 0, 0, 0.5)),url('https://www.hdwallpapers.in/download/music_note_green_background_hd_music-HD.jpg'); */
+    background-color: lightsteelblue;
+    
+}
+h1{
+    color: green;
+}
+li a {
+    text-decoration: none;
+}
+li{
+    padding: 0 3pt;
+    margin: 3pt 0;
+    /* border: 1px black solid; */
+}
+
+#btn{
+    height: 10%;
+}
+
+.heading {
+    background-color: aquamarine;
+}
+
+.the_head{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.the_head2{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}

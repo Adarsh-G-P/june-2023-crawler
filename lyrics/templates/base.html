@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="{{url_for('static', filename='site.css')}}" rel="stylesheet">
+
+    <title>Welcome to our Lyrics server</title>
+<style>
+  .navbar {
+    background-image: url("{{url_for('static', filename='bac.jpg')}}");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .navbar-heading {
+    font-size: 45px;
+    margin: 0;
+    color: rgb(10, 10, 10);
+  }
+</style
+  </head>
+  <body>
+
+
+    <div class="navbar">
+      <h1 class="navbar-heading">Welcome to our Lyrics server</h1>
+    </div>
+
+    <p class="lead" style="font-size: 24px; color:green; text-align: center; padding: 05px;">
+      Welcome to the <span style="font-weight: bold; color: #337ab7;">Hamon Lyrics</span> database.
+    </p>
+    <p class="lead" style="font-size: 16px; color: black;  padding: 05px;">
+      <span style="font-weight: bold;">We have lyrics of several songs in our system.Please use the links below to navigate.</span>
+    </p>
+    
+
+    <!-- <p class="lead"> Welcome to the Hamon Lyrics database. </p> -->
+    <!-- <p> We have lyrics of several songs in our system. Please use the
+    links below to navigate.</p> -->
+    
+    {% block maincontent %} {% endblock %}
+
+    <p id="something">
+      Lyrics "donated" by <a href="https://songlyrics.com/">Song Lyrics </a>
+    </p>
+    <!-- Optional JavaScript; choose one of the two! -->
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <script type="text/babel" src="{{url_for('static', filename='site.js')}}"></script>
+
+
+    <script src="{{url_for('static', filename='site.js')}}"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    -->
+    <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+  </body>
+</html>

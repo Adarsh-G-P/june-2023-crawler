@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, Response, render_template, request, jsonify
 
 import models
 
@@ -8,37 +8,78 @@ app = Flask("lyrics")
 @app.route("/")
 def index():
     db = models.init_db(app)
-    artists_count = db.session.scalar(db.select(db.func.count(models.Artist.id)))
-    tracks_count = db.session.scalar(db.select(db.func.count(models.Tracks.id)))
-    return f"<h1>Welcome to the lyrics server. We have {artists_count} artists and {tracks_count} tracks.</h1>"
+    artists = db.session.execute(db.select(models.Artist)).scalars()
+    return render_template("index.html", artists = artists)
+
+@app.route("/artist/<artist_id>")
+def artist(artist_id):
+    db = models.init_db(app)
+    artists = db.session.execute(db.select(models.Artist)).scalars()
+    artist = db.session.execute(db.select(models.Artist).filter(models.Artist.id == artist_id)).scalar()
+    track = db.session.execute(db.select(models.Tracks).filter(models.Tracks.id == artist_id)).scalar()
+
+    return render_template("artists.html", artists = artists, current = artist,track=track)
+
+
+@app.route("/song/<song_id>",methods = ['POST','GET'])
+def update_lyrics(song_id):
+    db = models.init_db(app)
+    artists = db.session.execute(db.select(models.Artist)).scalars()
+    track = db.session.execute(db.select(models.Tracks).filter(models.Tracks.id == song_id)).scalar()
+
+    # Check if the "Accept" header contains "application/json"
+    if "application/json" in request.headers.get("Accept", ""):
+        # Return JSON if the header is set to "application/json" or contains "application/json"
+        return jsonify({"name":track.name, "lyrics":track.lyrics,})
+    else:
+        # Render the HTML template for other requests
+        return render_template("lyrics.html", artists=artists, current=track.artist, track=track)
+
+
+
 
 @app.route("/user/<id>")
 def users(id):
     return f"You asked for user {id}"
 
-@app.route("/artists")
-def list_artist():
-    db = models.init_db(app)
-    print(db)
-    artists = db.session.execute(db.select(models.Artist.name))
-    print(artists)
-    artist_name = [artist.name for artist in artists]
-    print(artist_name)
-    ret = "<h1>Artists</h1>"
-    for idx,name in enumerate(artist_name, start=1):
-        ret += f"{idx}.{name}<br>"
-        # return f"<ul><li>{idx}.{name}</li></ul>"
 
-    return f'{ret}'
-    
 
-@app.route("/artists/tracks")
-def tracks():
-    db = models.init_db(app)
-    artists = db.session.execute(db.select(models.Artist)).scalars()
-    output = []
-    for artist in artists:
-        artist_tracks = db.session.execute(db.select(models.Tracks).where(models.Tracks.artist_id == artist.id)).scalars()
-        artist_track_names = set([track.name for track in artist_tracks]) 
-        output.append(f"{artist.name}: {', '.join(artist_track_names)}")
-    return "<br><br>".join(output)    
+
+# from flask import Flask, Response, render_template
+
+# import models
+
+# app = Flask("lyrics")
+
+
+# @app.route("/")
+# def index():
+#     db = models.init_db(app)
+#     artists = db.session.execute(db.select(models.Artist)).scalars()
+#     return render_template("index.html", artists = artists)
+
+# @app.route("/artist/<artist_id>")
+# def artist(artist_id):
+#     db = models.init_db(app)
+#     artists = db.session.execute(db.select(models.Artist)).scalars()
+#     artist = db.session.execute(db.select(models.Artist).filter(models.Artist.id == artist_id)).scalar()
+#     return render_template("artists.html", artists = artists, current = artist)
+
+
+# @app.route("/song/<song_id>")
+# def song(song_id):
+#     db = models.init_db(app)
+#     artists = db.session.execute(db.select(models.Artist)).scalars()
+#     track = db.session.execute(db.select(models.Tracks).filter(models.Tracks.id == song_id)).scalar()
+#     lyrics_list =track.lyrics.split('\n\n')
+#     ret = []
+#     for line in lyrics_list:
+#         ret.append(line)
+#     return render_template("lyrics.html", artists = artists, current = track.artist, track = track,lyrics=ret)
+
+
+
+
+# @app.route("/user/<id>")
+# def users(id):
+#     return f"You asked for user {id}"

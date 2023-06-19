@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block maincontent %}
+<div class="row align-items-start">
+  <div class="col">
+    <div class="card border-4 border-primary">
+      <div class="card-header">
+        <h3 class="card-title">Artists</h3>
+      </div>
+      <div class="card-body">
+        <ol>
+          {% for artist in artists %}
+            <li> 
+              {% if not current %}
+                <a href="{{url_for('artist', artist_id = artist.id)}}">{{artist.name}} </a>
+              {% elif current.id == artist.id %}
+                <a class="text-info bg-dark" href="{{url_for('artist', artist_id = artist.id)}}">{{artist.name}}</a>
+              {% else %}
+                <a href="{{url_for('artist', artist_id = artist.id)}}">{{artist.name}}</a>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ol>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    {% block songs %}
+    {% endblock %}  
+    </div>
+    <div class="col">
+    {% block lyrics %}
+    <div class="track-info">
+      <h3 class="track"></h3>
+      <div id="track-lyrics"></div>
+    </div>
+    
+    <div id="lyrics-container"></div>
+    {% endblock %}
+    </div>
+    {% endblock %}
+
+
+
+

@@ -1,0 +1,8 @@
+{% extends "artists.html" %}
+
+{% block lyrics %}
+    <h3> Song Name:{{track.name}}</h3>
+    {% for line in lyrics %}
+    <p><b>{{ line }}</b></p>
+    {% endfor %}
+{% endblock %}

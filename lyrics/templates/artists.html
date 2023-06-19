@@ -1,0 +1,16 @@
+
+
+{% extends "index.html" %}
+
+{% block songs %}
+    <h3>Tracks</h3>
+    <ol class="artists">
+      {% for song in current.tracks %}
+      <li> <a href="{{url_for('update_lyrics', song_id=song.id)}}">{{song.name}}</a> </li>
+      {% endfor %}
+    </ol>
+{% endblock %}
+
+
+
+        
