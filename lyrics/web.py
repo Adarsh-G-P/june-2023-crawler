@@ -21,22 +21,49 @@ def artist(artist_id):
     return render_template("artists.html", artists = artists, current = artist,track=track)
 
 
-@app.route("/song/<song_id>",methods = ['POST','GET'])
-def update_lyrics(song_id):
+# @app.route("/song/<song_id>",methods = ['POST','GET'])
+# def update_lyrics(song_id):
+#     db = models.init_db(app)
+#     artists = db.session.execute(db.select(models.Artist)).scalars()
+#     track = db.session.execute(db.select(models.Tracks).filter(models.Tracks.id == song_id)).scalar()
+
+#     # Check if the "Accept" header contains "application/json"
+#     if "application/json" in request.headers.get("Accept", ""):
+#         # Return JSON if the header is set to "application/json" or contains "application/json"
+#         return jsonify({"name":track.name, "lyrics":track.lyrics,})
+#     else:
+#         # Render the HTML template for other requests
+#         return render_template("lyrics.html", artists=artists, current=track.artist, track=track)
+
+
+@app.route("/song/<song_id>")
+def song(song_id):
+    print (request.headers)
     db = models.init_db(app)
     artists = db.session.execute(db.select(models.Artist)).scalars()
     track = db.session.execute(db.select(models.Tracks).filter(models.Tracks.id == song_id)).scalar()
-
-    # Check if the "Accept" header contains "application/json"
-    if "application/json" in request.headers.get("Accept", ""):
-        # Return JSON if the header is set to "application/json" or contains "application/json"
-        return jsonify({"name":track.name, "lyrics":track.lyrics,})
+    print (f"|{request.headers['Accept']}|");
+    if request.headers['Accept'] == "application/json":
+        return jsonify({"name":track.name,
+                        "lyrics":track.lyrics})
     else:
-        # Render the HTML template for other requests
-        return render_template("lyrics.html", artists=artists, current=track.artist, track=track)
+        return render_template("track.html", artists = artists, current = track.artist, track = track)
 
 
+@app.route("/songs/<artist_id>")
+def songs(artist_id):
+    db = models.init_db(app)
+    artist = db.session.execute(db.select(models.Artist).filter(models.Artist.id == artist_id)).scalar()
+    tracks = []
+    for i in artist.tracks:
+        t = {"id" : i.id,
+             "name" : i.name,
+             "lyrics" : i.lyrics}
+        tracks.append(t)
 
+    ret = { "current" : 0,
+            "tracks": tracks}
+    return jsonify(ret)
 
 @app.route("/user/<id>")
 def users(id):
